@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 配置中心</title>
+    <style>
+        :root {
+            --primary-color: #4a6bdf;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 16px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            position: relative;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #e9ecef;
+            z-index: 1;
+        }
+        
+        .step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-number {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .step.active .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .step-label {
+            font-size: 14px;
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: #495057;
+            font-size: 15px;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: #f8f9fa;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 107, 223, 0.1);
+            background-color: white;
+        }
+        
+        .network-list {
+            max-height: 250px;
+            overflow-y: auto;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+        
+        .network-item {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        
+        .network-item:hover {
+            background-color: #f0f3f8;
+        }
+        
+        .network-item.active {
+            background-color: rgba(74, 107, 223, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .network-item:last-child {
+            border-bottom: none;
+        }
+        
+        .network-item.hidden .network-name {
+            color: rgba(108, 117, 125, 0.6);
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .network-item.hidden .network-strength {
+            color: rgba(108, 117, 125, 0.6);
+        }
+        
+        .network-name {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+        
+        .network-name i {
+            margin-right: 8px;
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+        
+        .network-strength {
+            color: var(--secondary-color);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .network-strength.strong {
+            color: var(--success-color);
+        }
+        
+        .network-strength.medium {
+            color: #ffc107;
+        }
+        
+        .network-strength.weak {
+            color: var(--danger-color);
+        }
+        
+        .hidden-network-note {
+            font-size: 12px;
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .hidden-network-note i {
+            margin-right: 5px;
+            color: var(--danger-color);
+        }
+        
+        .manual-input-container {
+            margin-top: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .manual-input-container.show {
+            display: block;
+        }
+        
+        .toggle-manual-btn {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .toggle-manual-btn:hover {
+            color: #3a57c0;
+            text-decoration: underline;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            color: var(--secondary-color);
+            font-size: 14px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .footer-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-link:hover {
+            text-decoration: underline;
+            color: #3a57c0;
+        }
+
+        .refresh-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn {
+            padding: 8px 16px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .refresh-btn:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .refresh-btn i {
+            margin-right: 5px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        .refresh-btn:hover i {
+            transform: rotate(90deg);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .btn-block {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(74, 107, 223, 0.3);
+        }
+        
+        .btn-block:hover {
+            background-color: #3a57c0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(74, 107, 223, 0.4);
+        }
+        
+        .btn-block:hover::before {
+            left: 100%;
+        }
+        
+        .btn-block:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 5px rgba(74, 107, 223, 0.3);
+            background-color: #2c44b0;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .refresh-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .refresh-btn {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ESP32 Wi-Fi 配置</h1>
+            <p class="subtitle">为您的设备配置无线网络连接</p>
+        </header>
+        
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">选择 Wi-Fi</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-label">连接配置</div>
+            </div>
+        </div>
+        
+        <form id="wifi-config-form">
+            <div class="refresh-container">
+                <label>选择可用的 Wi-Fi 网络</label>
+                <button type="button" class="refresh-btn" id="refresh-btn">
+                    <i>↻</i> 刷新列表
+                </button>
+            </div>
+            
+            <p class="hidden-network-note"><i>⚠️</i> 部分网络名称已隐藏，如未找到您的网络，可以手动输入。</p>
+            
+            <div class="network-list" id="network-list">
+                <!-- WiFi列表将通过AJAX动态加载 -->
+            </div>
+            
+            <div class="manual-input-container" id="manual-input">
+                <div class="form-group">
+                    <label for="manual-wifi-name">手动输入 Wi-Fi 名称</label>
+                    <input type="text" id="manual-wifi-name" placeholder="输入自定义 Wi-Fi 名称">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="wifi-password">Wi-Fi 密码</label>
+                <input type="password" id="wifi-password" placeholder="输入您的 Wi-Fi 密码">
+            </div>
+            
+            <div class="toggle-manual-btn" id="toggle-manual">手动输入 Wi-Fi 名称</div>
+            
+            <button type="submit" class="btn-block">开始连接</button>
+        </form>
+        
+        <footer>
+            <p>© 2025 ESP32 配网工具 | <a href="#" class="footer-link">帮助文档</a> | <a href="#" class="footer-link">联系我们</a></p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 配网界面逻辑
+            const refreshBtn = document.getElementById('refresh-btn');
+            const refreshIcon = refreshBtn.querySelector('i');
+            const networkList = document.getElementById('network-list');
+            
+            // 初始化加载WiFi列表
+            loadWiFiList();
+            
+            // 刷新列表按钮点击事件
+            refreshBtn.addEventListener('click', function() {
+                refreshIcon.classList.add('loading');
+                this.textContent = '';
+                
+                loadWiFiList()
+                    .catch(error => {
+                        alert('加载WiFi列表失败: ' + error);
+                    })
+                    .finally(() => {
+                        refreshIcon.classList.remove('loading');
+                        this.textContent = '↻ 刷新列表';
+                    });
+            });
+            
+            // 页面切换逻辑保持不变
+            const networkItems = document.querySelectorAll('.network-item');
+            networkItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    networkItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.getElementById('manual-input').classList.remove('show');
+                    document.getElementById('manual-wifi-name').value = '';
+                });
+            });
+            
+            const toggleManualBtn = document.getElementById('toggle-manual');
+            const manualInput = document.getElementById('manual-input');
+            
+            toggleManualBtn.addEventListener('click', function() {
+                manualInput.classList.toggle('show');
+                networkItems.forEach(item => item.classList.remove('active'));
+                
+                if (manualInput.classList.contains('show')) {
+                    document.getElementById('manual-wifi-name').focus();
+                }
+            });
+            
+            const form = document.getElementById('wifi-config-form');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const selectedNetwork = document.querySelector('.network-item.active');
+                const manualNetwork = document.getElementById('manual-wifi-name').value;
+                const password = document.getElementById('wifi-password').value;
+                const formButton = this.querySelector('button[type="submit"]');
+                
+                if (!selectedNetwork && !manualNetwork) {
+                    alert('请选择或输入 Wi-Fi 网络');
+                    return;
+                }
+                
+                if (!password) {
+                    alert('请输入 Wi-Fi 密码');
+                    return;
+                }
+                
+                formButton.disabled = true;
+                formButton.textContent = '连接中...';
+                formButton.style.backgroundColor = '#6c757d';
+                
+                // 使用AJAX发送WiFi配置
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/api/wifi_config');
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onload = function() {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                alert('Wi-Fi 连接已成功！');
+                            } else {
+                                alert('Wi-Fi 连接失败: ' + response.message);
+                            }
+                        } catch (e) {
+                            alert('解析服务器响应失败');
+                        }
+                    } else {
+                        alert('服务器错误');
+                    }
+                };
+                xhr.onerror = function() {
+                    alert('网络错误');
+                };
+                
+                const data = {
+                    ssid: selectedNetwork ? selectedNetwork.getAttribute('data-ssid') : manualNetwork,
+                    password: password
+                };
+                
+                xhr.send(JSON.stringify(data));
+                
+                setTimeout(() => {
+                    formButton.disabled = false;
+                    formButton.textContent = '开始连接';
+                    formButton.style.backgroundColor = '';
+                }, 1000);
+            });
+            
+            // 使用AJAX加载WiFi列表的函数
+            function loadWiFiList() {
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', '/api/wifi_list');
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.onload = function() {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            try {
+                                const data = JSON.parse(xhr.responseText);
+                                updateWiFiList(data.wifi_list);
+                                resolve(data);
+                            } catch (e) {
+                                reject('解析WiFi列表失败');
+                            }
+                        } else {
+                            reject('获取WiFi列表失败');
+                        }
+                    };
+                    xhr.onerror = function() {
+                        reject('网络错误');
+                    };
+                    xhr.send();
+                });
+            }
+            
+            function updateWiFiList(wifiList) {
+                networkList.innerHTML = '';
+                
+                wifiList.forEach(item => {
+                    const networkItem = document.createElement('div');
+                    networkItem.className = 'network-item';
+                    networkItem.setAttribute('data-ssid', item.ssid);
+                    
+                    // 根据信号强度设置不同的图标
+                    let signalIcon = '';
+                    if (item.rssi >= -50) {
+                        // 强信号
+                        signalIcon = '📶';
+                    } else if (item.rssi >= -70) {
+                        // 中等信号
+                        signalIcon = '⚠️';
+                    } else {
+                        // 弱信号
+                        signalIcon = '🚫';
+                    }
+                    
+                    networkItem.innerHTML = `
+                        <span class="network-name"><i>${signalIcon}</i> ${item.ssid}</span>
+                        <span class="network-strength">${item.auth_mode}</span>
+                    `;
+                    
+                    networkItem.addEventListener('click', function() {
+                        document.querySelectorAll('.network-item').forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        document.getElementById('manual-input').classList.remove('show');
+                        document.getElementById('manual-wifi-name').value = '';
+                    });
+                    
+                    networkList.appendChild(networkItem);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
