@@ -1,0 +1,2 @@
+source /home/ibingo/esp-idf-WEBlink/build/bootloader/gdbinit/symbols
+source /home/ibingo/esp-idf-WEBlink/build/bootloader/gdbinit/connect

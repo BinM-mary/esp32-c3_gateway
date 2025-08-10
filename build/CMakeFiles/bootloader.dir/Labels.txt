@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/home/ibingo/esp-idf-WEBlink/build/CMakeFiles/bootloader
+/home/ibingo/esp-idf-WEBlink/build/CMakeFiles/bootloader.rule
+/home/ibingo/esp-idf-WEBlink/build/CMakeFiles/bootloader-complete.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/home/ibingo/esp-idf-WEBlink/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
