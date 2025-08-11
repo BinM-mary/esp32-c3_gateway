@@ -78,4 +78,5 @@
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/main/libmain.a
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/WiFi/libWiFi.a
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/dns_server/libdns_server.a
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/libespressif__ssd1306.a
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/libscan.a

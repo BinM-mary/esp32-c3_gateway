@@ -821,6 +821,13 @@
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/dns_server/CMakeFiles/rebuild_cache.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/dns_server/CMakeFiles/edit_cache.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/dns_server/CMakeFiles/__idf_dns_server.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/install/strip.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/install/local.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/install.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/list_install_components.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/rebuild_cache.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/edit_cache.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/CMakeFiles/__idf_espressif__ssd1306.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/CMakeFiles/install/strip.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/CMakeFiles/install/local.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/CMakeFiles/install.dir

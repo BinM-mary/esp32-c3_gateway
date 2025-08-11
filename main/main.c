@@ -20,16 +20,38 @@
 #include "esp_system.h"
 #include "nvs.h"
 
-// 包含组件头文件
+
 #include "WiFi.h"
 #include "scan.h"
 #include "dns_server.h"
+
+#include "ssd1306.h"
+
+#define I2C_MASTER_SCL_IO 5
+#define I2C_MASTER_SDA_IO 4
+#define I2C_MASTER_NUM I2C_NUM_0
+#define I2C_MASTER_FREQ_HZ 100000
+static ssd1306_handle_t ssd1306_dev = NULL; 
 
 extern const char root_start[] asm("_binary_root_html_start");
 extern const char root_end[] asm("_binary_root_html_end");
 
 static httpd_handle_t start_webserver(void);
 static const char *TAG = "example";
+
+static void i2c_bus_init(void)
+{
+    i2c_config_t conf;
+    conf.mode = I2C_MODE_MASTER;
+    conf.sda_io_num = (gpio_num_t)I2C_MASTER_SDA_IO;
+    conf.sda_pullup_en = GPIO_PULLUP_ENABLE;
+    conf.scl_io_num = (gpio_num_t)I2C_MASTER_SCL_IO;
+    conf.scl_pullup_en = GPIO_PULLUP_ENABLE; 
+    conf.master.clk_speed = I2C_MASTER_FREQ_HZ;
+    conf.clk_flags = I2C_SCLK_SRC_FLAG_FOR_NOMAL;
+    i2c_param_config(I2C_MASTER_NUM, &conf);
+    i2c_driver_install(I2C_MASTER_NUM, conf.mode, 0, 0, 0);
+}
 
 // HTTP GET Handler for root page
 static esp_err_t root_get_handler(httpd_req_t *req)
@@ -43,7 +65,7 @@ static esp_err_t root_get_handler(httpd_req_t *req)
 }
 
 static esp_err_t reback_button_handler(httpd_req_t *req) {
-    char json_data[50]; // 确保有足够的空间来存储JSON字符串
+    char json_data[50]; 
     snprintf(json_data, sizeof(json_data), "{\"show\": false}");
 
     httpd_resp_set_type(req, "application/json");
@@ -93,11 +115,11 @@ static esp_err_t wifi_config_post_handler(httpd_req_t *req)
         // Use strncpy to copy the password
         strncpy(wifi_creds.password, password_item->valuestring, sizeof(wifi_creds.password) - 1);
         wifi_creds.password[sizeof(wifi_creds.password) - 1] = '\0';  // Ensure null-termination
-        nvs_write(); // 写入 NVS 存储的 Wi-Fi 信息
+        nvs_write(); // 写入 NVS 存储�? Wi-Fi 信息
 
         cJSON *response = cJSON_CreateObject();
         cJSON_AddBoolToObject(response, "success", true);
-        cJSON_AddStringToObject(response, "message", "Wi-Fi连接请求已接收");
+        cJSON_AddStringToObject(response, "message", "Wi-Fi连接请求已接�?");
 
         httpd_resp_set_type(req, "application/json");
         httpd_resp_send(req, cJSON_Print(response), HTTPD_RESP_USE_STRLEN);
@@ -152,14 +174,29 @@ static httpd_handle_t start_webserver(void)
 
 void app_main(void)
 {
-    wifi_init(); // 初始化WiFi
-    nvs_read(); // 读取 NVS 存储的 Wi-Fi 信息
-    wifi_init_sta(); // 初始化Station模式
+    i2c_bus_init();
 
-    // 启动WiFi扫描任务
+    ssd1306_dev = ssd1306_create(I2C_MASTER_NUM, SSD1306_I2C_ADDRESS);
+    ssd1306_init(ssd1306_dev);
+    ssd1306_clear_screen(ssd1306_dev, 0x00);
+
+    char data_str[10] = {0};
+    sprintf(data_str, "C STR");
+    // ssd1306_draw_string(ssd1306_dev, 0, 0, (const uint8_t *)data_str, 16, 1);
+    // ssd1306_draw_string(ssd1306_dev, 0, 16, (const uint8_t *)data_str, 16, 1);
+    // ssd1306_draw_string(ssd1306_dev, 0, 32, (const uint8_t *)"AAAAAAAAAAAAAAAA", 16, 1);//16
+    // ssd1306_draw_string(ssd1306_dev, 0, 48, (const uint8_t *)"AAAAAAAAAAAAAAAA", 16, 1);//16
+    ssd1306_draw_bitmap(ssd1306_dev, 0, 0, c_chBat816, 8, 16);
+    ssd1306_refresh_gram(ssd1306_dev);
+
+    wifi_init(); 
+    nvs_read(); 
+    wifi_init_sta(); 
+
+    
     xTaskCreate(wifi_scan_task, "wifi_scan_task", 4096, NULL, 5, NULL);
 
-    start_webserver(); // 启动HTTP服务器
+    start_webserver(); 
 
-    start_dns_server(); // 启动DNS服务器
+    start_dns_server(); 
 }
