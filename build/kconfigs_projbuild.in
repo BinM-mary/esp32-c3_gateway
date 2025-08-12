@@ -4,3 +4,5 @@ source "/home/ibingo/esp32s3/v5.3.3/esp-idf/components/esp_rom/Kconfig.projbuild
 source "/home/ibingo/esp32s3/v5.3.3/esp-idf/components/esptool_py/Kconfig.projbuild"
 source "/home/ibingo/esp32s3/v5.3.3/esp-idf/components/partition_table/Kconfig.projbuild"
 source "/home/ibingo/esp-idf-WEBlink/main/Kconfig.projbuild"
+source "/home/ibingo/esp-idf-WEBlink/components/mqtt_gateway/Kconfig.projbuild"
+source "/home/ibingo/esp32s3/v5.3.3/esp-idf/examples/common_components/protocol_examples_common/Kconfig.projbuild"

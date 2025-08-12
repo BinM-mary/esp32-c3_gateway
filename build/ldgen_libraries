@@ -79,4 +79,6 @@
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/WiFi/libWiFi.a
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/dns_server/libdns_server.a
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/espressif__ssd1306/libespressif__ssd1306.a
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/protocol_examples_common/libprotocol_examples_common.a
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/mqtt_gateway/libmqtt_gateway.a
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/libscan.a

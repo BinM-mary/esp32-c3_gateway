@@ -26,6 +26,7 @@
 #include "dns_server.h"
 
 #include "ssd1306.h"
+#include "mqtt_gateway.h"
 
 #define I2C_MASTER_SCL_IO 5
 #define I2C_MASTER_SDA_IO 4
@@ -198,5 +199,7 @@ void app_main(void)
 
     start_webserver(); 
 
-    start_dns_server(); 
+    start_dns_server();
+
+    mqtt_app_start();
 }

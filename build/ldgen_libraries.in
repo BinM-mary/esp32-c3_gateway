@@ -79,4 +79,6 @@ $<TARGET_FILE:__idf_main>
 $<TARGET_FILE:__idf_WiFi>
 $<TARGET_FILE:__idf_dns_server>
 $<TARGET_FILE:__idf_espressif__ssd1306>
+$<TARGET_FILE:__idf_protocol_examples_common>
+$<TARGET_FILE:__idf_mqtt_gateway>
 $<TARGET_FILE:__idf_scan>
