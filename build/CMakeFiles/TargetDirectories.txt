@@ -849,3 +849,10 @@
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/CMakeFiles/rebuild_cache.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/CMakeFiles/edit_cache.dir
 /home/ibingo/esp-idf-WEBlink/build/esp-idf/scan/CMakeFiles/__idf_scan.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/install/strip.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/install/local.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/install.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/list_install_components.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/rebuild_cache.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/edit_cache.dir
+/home/ibingo/esp-idf-WEBlink/build/esp-idf/uart_handler/CMakeFiles/__idf_uart_handler.dir

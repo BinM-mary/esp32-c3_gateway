@@ -27,6 +27,7 @@
 
 #include "ssd1306.h"
 #include "mqtt_gateway.h"
+#include "uart_handler.h"
 
 #define I2C_MASTER_SCL_IO 5
 #define I2C_MASTER_SDA_IO 4
@@ -202,4 +203,5 @@ void app_main(void)
     start_dns_server();
 
     mqtt_app_start();
+    uart_handler_init(mqtt_publish_data);
 }

@@ -7,7 +7,7 @@
 
 # =============================================================================
 # Project: espweblink
-# Configuration: Debug
+# Configuration: 
 # =============================================================================
 # =============================================================================
 
@@ -1764,6 +1764,25 @@ rule C_COMPILER____idf_scan
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER____idf_scan
+  command = $PRE_LINK && /usr/bin/cmake -E remove $TARGET_FILE && /home/ibingo/esp32s3/Tools/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin/riscv32-esp-elf-ar qc $TARGET_FILE $LINK_FLAGS $in && /home/ibingo/esp32s3/Tools/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin/riscv32-esp-elf-ranlib $TARGET_FILE && $POST_BUILD
+  description = Linking C static library $TARGET_FILE
+  restat = $RESTAT
+
+
+#############################################
+# Rule for compiling C files.
+
+rule C_COMPILER____idf_uart_handler
+  depfile = $DEP_FILE
+  deps = gcc
+  command = /home/ibingo/esp32s3/Tools/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin/riscv32-esp-elf-gcc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
+  description = Building C object $out
+
+
+#############################################
+# Rule for linking C static library.
+
+rule C_STATIC_LIBRARY_LINKER____idf_uart_handler
   command = $PRE_LINK && /usr/bin/cmake -E remove $TARGET_FILE && /home/ibingo/esp32s3/Tools/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin/riscv32-esp-elf-ar qc $TARGET_FILE $LINK_FLAGS $in && /home/ibingo/esp32s3/Tools/tools/riscv32-esp-elf/esp-13.2.0_20240530/riscv32-esp-elf/bin/riscv32-esp-elf-ranlib $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT

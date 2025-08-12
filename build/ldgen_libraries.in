@@ -82,3 +82,4 @@ $<TARGET_FILE:__idf_espressif__ssd1306>
 $<TARGET_FILE:__idf_protocol_examples_common>
 $<TARGET_FILE:__idf_mqtt_gateway>
 $<TARGET_FILE:__idf_scan>
+$<TARGET_FILE:__idf_uart_handler>
